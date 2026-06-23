@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>PadiSmartApp</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-effects" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+    <span class="grid-overlay"></span>
+  </div>
+
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="menu-toggle" id="menuToggle" aria-label="Buka menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <div class="brand">
+        <div class="brand-mark">
+          <img src="profil.png" alt="Foto Profil" />
+        </div>
+        <div class="brand-text">
+          <strong>PadiSmartApp</strong>
+          <small>Aplikasi berbasis Website</small>
+        </div>
+      </div>
+    </div>
+
+    <nav class="topnav" aria-label="Navigasi utama">
+      <button class="nav-chip active" data-section="home">Beranda</button>
+      <button class="nav-chip" data-section="criteria">Data Kriteria</button>
+      <button class="nav-chip" data-section="alternatives">Data Alternatif</button>
+      <button class="nav-chip" data-section="process">Proses SPK</button>
+      <button class="nav-chip" data-section="results">Hasil Akhir</button>
+      <button class="nav-chip" data-section="best">Alternatif Terbaik</button>
+      <button class="nav-chip" data-section="chart">Grafik</button>
+    </nav>
+
+    <div class="top-actions">
+      <span class="status-badge" id="statusBadge">Memuat data...</span>
+      <button class="btn btn-ghost" id="saveBtn" type="button">Simpan Data</button>
+      <button class="btn btn-ghost" id="restoreBtn" type="button">Pulihkan Data</button>
+      <button class="btn btn-primary" id="printBtn" type="button">Cetak Hasil</button>
+    </div>
+  </header>
+
+  <div class="sidebar-overlay" id="overlay"></div>
+
+  <aside class="sidebar" id="sidebar" aria-label="Menu samping">
+    <div class="sidebar-head">
+      <div class="sidebar-profile">
+        <div class="profile-avatar large">
+          <img src="profil.png" alt="Foto Profil" />
+        </div>
+      </div>
+      <div class="sidebar-title">Navigasi Menu</div>
+      <div class="sidebar-subtitle">Pilih halaman yang ingin dibuka</div>
+    </div>
+
+    <button class="nav-link active" data-section="home">Beranda</button>
+    <button class="nav-link" data-section="criteria">Data Kriteria</button>
+    <button class="nav-link" data-section="alternatives">Data Alternatif</button>
+    <button class="nav-link" data-section="process">Proses SPK</button>
+    <button class="nav-link" data-section="results">Hasil Akhir</button>
+    <button class="nav-link" data-section="best">Alternatif Terbaik</button>
+    <button class="nav-link" data-section="chart">Grafik</button>
+  </aside>
+
+  <main class="content">
+    <section class="page active" id="home">
+      <div class="page-inner">
+        <div class="hero panel">
+          <div class="eyebrow">Dashboard Profesional • Metode SAW • Bibit Padi</div>
+          <h1>Sistem Pendukung Keputusan Pemilihan Jenis Bibit Padi Terbaik Menggunakan Metode SAW</h1>
+          <p class="hero-text">
+            Aplikasi ini membantu menentukan bibit padi terbaik secara objektif berdasarkan kriteria produktivitas, ketahanan hama, umur panen, dan harga benih.
+            Semua perhitungan dilakukan langsung di browser, lengkap dengan penyimpanan lokal, pencarian, sorting, grafik, serta laporan hasil.
+          </p>
+
+          <div class="hero-grid">
+            <div class="hero-card">
+              <h3>Tujuan Sistem</h3>
+              <p>Memberikan rekomendasi bibit padi terbaik secara cepat, terukur, dan mudah dipahami oleh pengguna.</p>
+            </div>
+            <div class="hero-card">
+              <h3>Mode Interaktif</h3>
+              <p>Data dapat ditambah, diubah, dihapus, disimpan, dan dipulihkan melalui localStorage tanpa framework.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span>Jumlah Alternatif</span>
+            <strong id="statAlternatives">0</strong>
+          </div>
+          <div class="stat-card">
+            <span>Jumlah Kriteria</span>
+            <strong id="statCriteria">4</strong>
+          </div>
+          <div class="stat-card">
+            <span>Total Bobot</span>
+            <strong id="statWeight">100%</strong>
+          </div>
+          <div class="stat-card accent">
+            <span>Alternatif Terbaik</span>
+            <strong id="statBest">-</strong>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Ringkasan Cepat</h2>
+              <p>Informasi hasil perhitungan SAW saat ini.</p>
+            </div>
+          </div>
+
+          <div class="best-summary" id="homeBestSummary">
+            <div class="best-summary-left">
+              <div class="best-badge">Rekomendasi Utama</div>
+              <h3 id="homeBestName">-</h3>
+              <p id="homeBestDescription">Belum ada data untuk dihitung.</p>
+            </div>
+            <div class="best-summary-right">
+              <div class="progress-ring">
+                <div class="progress-ring-inner">
+                  <span id="homeBestScore">0.0000</span>
+                  <small>Skor SAW</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="criteria">
+      <div class="page-inner">
+        <div class="section-title">
+          <h2>Data Kriteria</h2>
+          <p>Bobot dan jenis kriteria yang digunakan dalam sistem pendukung keputusan.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-header">
+              <h3>Tabel Kriteria</h3>
+              <p>Empat kriteria utama untuk penilaian bibit padi.</p>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Kode</th>
+                    <th>Nama Kriteria</th>
+                    <th>Jenis</th>
+                    <th>Bobot</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>C1</td><td>Produktivitas</td><td>Benefit</td><td>25%</td></tr>
+                  <tr><td>C2</td><td>Ketahanan Hama</td><td>Benefit</td><td>30%</td></tr>
+                  <tr><td>C3</td><td>Umur Panen</td><td>Benefit</td><td>25%</td></tr>
+                  <tr><td>C4</td><td>Harga Benih</td><td>Cost</td><td>20%</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <h3>Aturan Penilaian 1–5</h3>
+              <p>Skala penilaian untuk kriteria benefit dan cost.</p>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nilai</th>
+                    <th>Interpretasi Benefit</th>
+                    <th>Interpretasi Cost</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>5</td><td>Sangat tinggi / sangat baik</td><td>Sangat murah / sangat baik</td></tr>
+                  <tr><td>4</td><td>Tinggi / baik</td><td>Murah / baik</td></tr>
+                  <tr><td>3</td><td>Sedang</td><td>Cukup murah / cukup baik</td></tr>
+                  <tr><td>2</td><td>Rendah</td><td>Mahal</td></tr>
+                  <tr><td>1</td><td>Sangat rendah</td><td>Sangat mahal</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="alternatives">
+      <div class="page-inner">
+        <div class="section-title">
+          <h2>Data Alternatif</h2>
+          <p>Tambah, ubah, hapus, dan cari data bibit padi secara langsung.</p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Input Data Alternatif Baru</h3>
+            <p>Gunakan form ini untuk menambahkan alternatif baru.</p>
+          </div>
+
+          <form id="addForm" class="add-form">
+            <div class="field">
+              <label for="newName">Nama Alternatif</label>
+              <input type="text" id="newName" placeholder="Contoh: Bibit Padi Ciherang Super" required />
+            </div>
+
+            <div class="field"><label for="newC1">C1</label><input type="number" id="newC1" min="1" max="5" value="3" required /></div>
+            <div class="field"><label for="newC2">C2</label><input type="number" id="newC2" min="1" max="5" value="3" required /></div>
+            <div class="field"><label for="newC3">C3</label><input type="number" id="newC3" min="1" max="5" value="3" required /></div>
+            <div class="field"><label for="newC4">C4</label><input type="number" id="newC4" min="1" max="5" value="3" required /></div>
+
+            <div class="field action-field">
+              <label>&nbsp;</label>
+              <button class="btn btn-primary" type="submit">Tambah Data</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h3>Daftar Alternatif</h3>
+              <p>Edit langsung nilai pada tabel. Klik Simpan Data agar tetap ada setelah refresh.</p>
+            </div>
+            <div class="table-tools">
+              <input type="search" id="dataSearch" placeholder="Cari kode atau nama alternatif..." />
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table id="dataTable">
+              <thead>
+                <tr>
+                  <th data-sort-key="code">Kode <span class="sort-icon"></span></th>
+                  <th data-sort-key="name">Nama Alternatif <span class="sort-icon"></span></th>
+                  <th data-sort-key="c1">C1 <span class="sort-icon"></span></th>
+                  <th data-sort-key="c2">C2 <span class="sort-icon"></span></th>
+                  <th data-sort-key="c3">C3 <span class="sort-icon"></span></th>
+                  <th data-sort-key="c4">C4 <span class="sort-icon"></span></th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="dataTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="process">
+      <div class="page-inner">
+        <div class="section-title">
+          <h2>Proses Perhitungan Metode SPK</h2>
+          <p>Langkah perhitungan SAW dari matriks keputusan hingga nilai preferensi.</p>
+        </div>
+
+        <div class="panel formula-panel">
+          <div class="panel-header">
+            <h3>Rumus SAW</h3>
+            <p>Benefit: nilai dibagi nilai maksimum, Cost: nilai minimum dibagi nilai atribut.</p>
+          </div>
+          <div class="formula-box">
+            <div><b>Benefit:</b> r<sub>ij</sub> = x<sub>ij</sub> / max(x<sub>j</sub>)</div>
+            <div><b>Cost:</b> r<sub>ij</sub> = min(x<sub>j</sub>) / x<sub>ij</sub></div>
+            <div><b>Preferensi:</b> V<sub>i</sub> = Σ (w<sub>j</sub> × r<sub>ij</sub>)</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-header">
+              <h3>Matriks Keputusan Awal</h3>
+              <p>Nilai asli dari tiap alternatif sebelum normalisasi.</p>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Kode</th><th>Nama</th><th>C1</th><th>C2</th><th>C3</th><th>C4</th>
+                  </tr>
+                </thead>
+                <tbody id="decisionMatrixBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <h3>Perhitungan Bobot</h3>
+              <p>Bobot kriteria yang dipakai pada proses SAW.</p>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Kriteria</th><th>Jenis</th><th>Bobot</th><th>Rumus</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>C1</td><td>Benefit</td><td>0.25</td><td>w1 × r1</td></tr>
+                  <tr><td>C2</td><td>Benefit</td><td>0.30</td><td>w2 × r2</td></tr>
+                  <tr><td>C3</td><td>Benefit</td><td>0.25</td><td>w3 × r3</td></tr>
+                  <tr><td>C4</td><td>Cost</td><td>0.20</td><td>w4 × r4</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-header">
+              <h3>Matriks Normalisasi</h3>
+              <p>Nilai hasil normalisasi berdasarkan benefit dan cost.</p>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Kode</th><th>Nama</th><th>r1</th><th>r2</th><th>r3</th><th>r4</th>
+                  </tr>
+                </thead>
+                <tbody id="normalizationBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <h3>Matriks Terbobot</h3>
+              <p>Hasil normalisasi setelah dikalikan dengan bobot kriteria.</p>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Kode</th><th>w1×r1</th><th>w2×r2</th><th>w3×r3</th><th>w4×r4</th><th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="weightedBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Nilai Preferensi</h3>
+            <p>Setiap alternatif dihitung menjadi satu nilai akhir SAW.</p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Kode</th><th>Nama</th><th>Nilai Preferensi</th>
+                </tr>
+              </thead>
+              <tbody id="preferenceBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="results">
+      <div class="page-inner">
+        <div class="section-title">
+          <h2>Hasil Akhir dan Peringkat</h2>
+          <p>Ranking dari nilai preferensi tertinggi ke terendah.</p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h3>Tabel Nilai Akhir</h3>
+              <p>Gunakan sorting untuk mengurutkan kolom yang diinginkan.</p>
+            </div>
+            <div class="action-row">
+              <input type="search" id="resultSearch" placeholder="Cari alternatif di hasil..." />
+              <button class="btn btn-secondary" id="downloadCsvBtn" type="button">Download CSV</button>
+              <button class="btn btn-secondary" id="downloadJsonBtn" type="button">Download JSON</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table id="resultTable">
+              <thead>
+                <tr>
+                  <th data-sort-key="rank">Ranking <span class="sort-icon"></span></th>
+                  <th data-sort-key="code">Kode <span class="sort-icon"></span></th>
+                  <th data-sort-key="name">Nama Alternatif <span class="sort-icon"></span></th>
+                  <th data-sort-key="score">Nilai Akhir <span class="sort-icon"></span></th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="resultTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="best">
+      <div class="page-inner">
+        <div class="section-title">
+          <h2>Alternatif Terbaik</h2>
+          <p>Kartu khusus untuk menampilkan juara 1, 2, dan 3 dari hasil SAW.</p>
+        </div>
+        <div class="panel best-panel" id="bestCard"></div>
+      </div>
+    </section>
+
+    <section class="page" id="chart">
+      <div class="page-inner">
+        <div class="section-title">
+          <h2>Grafik Nilai Akhir</h2>
+          <p>Grafik batang seluruh alternatif berdasarkan nilai preferensi.</p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Visualisasi Ranking</h3>
+            <p>Batang tertinggi menunjukkan alternatif terbaik.</p>
+          </div>
+          <div class="chart-wrap">
+            <div id="chartRoot"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
